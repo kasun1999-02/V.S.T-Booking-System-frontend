@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button } from 'antd';
-import { GoogleOutlined } from '@ant-design/icons'; 
 import { useNavigate } from 'react-router-dom'; 
 
 const SignUp = () => {
@@ -53,21 +51,21 @@ const SignUp = () => {
   };
 
   return (
-    <div className="signup-container">
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+    <div className="signup-container min-h-screen">
+      <section className="bg-gray-50 dark:bg-gray-900 min-h-screen py-4 sm:py-8">
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 py-4 sm:py-8 mx-auto min-h-screen sm:min-h-0 md:h-screen lg:py-0">
+          <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="p-4 sm:p-6 md:p-8 space-y-4 md:space-y-6">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white text-center sm:text-left">
                 Create an account
               </h1>
-              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-              {successMessage && <p className="text-green-500">{successMessage}</p>}
+              {errorMessage && <p className="text-red-500 text-sm sm:text-base text-center sm:text-left">{errorMessage}</p>}
+              {successMessage && <p className="text-green-500 text-sm sm:text-base text-center sm:text-left">{successMessage}</p>}
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm sm:text-base font-medium text-gray-900 dark:text-white"
                   >
                     Email
                   </label>
@@ -75,19 +73,20 @@ const SignUp = () => {
                     type="email"
                     name="email"
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-base sm:text-sm rounded-lg
+                    focus:ring-primary-600 focus:border-primary-600 block w-full p-3 sm:p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                     dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    autoComplete="email"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm sm:text-base font-medium text-gray-900 dark:text-white"
                   >
                     Password
                   </label>
@@ -97,18 +96,19 @@ const SignUp = () => {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300
-                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                    text-gray-900 text-base sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 sm:p-2.5 dark:bg-gray-700
                     dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                     dark:focus:border-blue-500"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    autoComplete="new-password"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="confirmPassword"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm sm:text-base font-medium text-gray-900 dark:text-white"
                   >
                     Confirm Password
                   </label>
@@ -118,12 +118,13 @@ const SignUp = () => {
                     id="confirmPassword"
                     placeholder="••••••••"
                     className="bg-gray-50 border
-                    border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    border-gray-300 text-gray-900 text-base sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 sm:p-2.5
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                     dark:focus:border-blue-500"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    autoComplete="new-password"
                   />
                 </div>
 
@@ -131,7 +132,7 @@ const SignUp = () => {
                   <div>
                     <label
                       htmlFor="adminCode"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm sm:text-base font-medium text-gray-900 dark:text-white"
                     >
                       Admin Code
                     </label>
@@ -141,26 +142,27 @@ const SignUp = () => {
                       id="adminCode"
                       placeholder="Enter admin code"
                       className="bg-gray-50 border
-                      border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                      border-gray-300 text-gray-900 text-base sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 sm:p-2.5
                       dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                       dark:focus:border-blue-500"
                       value={adminCode}
                       onChange={(e) => setAdminCode(e.target.value)}
+                      autoComplete="off"
                     />
                   </div>
                 )}
 
-                <div className="flex justify-between gap-x-1">
+                <div className="flex justify-center">
                   <button
                     type="submit"
-                    className="w-1/2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    className="w-full sm:w-auto sm:min-w-[200px] text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-base sm:text-sm px-5 py-3 sm:py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition-colors"
                   >
                     Create an account
                   </button>
                 </div>
               </form>
 
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <p className="text-xs sm:text-sm font-light text-gray-500 dark:text-gray-400 text-center sm:text-left">
                 Already have an account?{" "}
                 <a
                   href={"/login"}
@@ -170,12 +172,13 @@ const SignUp = () => {
                 </a>
               </p>
 
-              <div className="flex items-center justify-center mt-4">
-                <label className="mr-2 text-sm text-gray-700 dark:text-white">Sign up as Admin</label>
+              <div className="flex items-center justify-center mt-4 flex-wrap gap-2">
+                <label className="text-xs sm:text-sm text-gray-700 dark:text-white">Sign up as Admin</label>
                 <input
                   type="checkbox"
                   checked={isAdmin}
                   onChange={(e) => setIsAdmin(e.target.checked)}
+                  className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer"
                 />
               </div>
             </div>

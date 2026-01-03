@@ -9,7 +9,6 @@ import ContactUs from './pages/ContactUs';
 import Reservation from './pages/Reservation';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import Create from './pages/create';
 import EditPost from './pages/editPost';
 import Admin from './pages/Admin';
 import UserHome from "./pages/UserHome";
@@ -27,10 +26,10 @@ function App() {
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/create" element={<Create />} />
           <Route path="/edit/:id" element={<EditPost />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/userhome" element={<UserHome />} />
+          <Route path="/me" element={<UserHome />} />
         </Routes>
       </BrowserRouter>
     </div>

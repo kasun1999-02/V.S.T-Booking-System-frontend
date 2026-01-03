@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 
 const { Option } = Select;
@@ -19,6 +19,7 @@ function EditPost() {
 
   // Retrieve the 'id' parameter from the route
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // Check if 'id' is available before making the API call
   useEffect(() => {
@@ -102,7 +103,6 @@ function EditPost() {
 
     axios.put(`http://localhost:5000/posts/${id}`, data).then((res) => {
       if (res.data.success) {
-
         alert("Post Updated Successfully");
         formRef.current.reset();
      
@@ -115,6 +115,14 @@ function EditPost() {
         setBranch("");
         setFromdate("");
         setComments("");
+        
+        // Redirect based on user role
+        const userRole = localStorage.getItem('userRole');
+        if (userRole === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/userhome');
+        }
       }
     });
   
@@ -193,10 +201,7 @@ function EditPost() {
 
             <div style={{ textAlign: 'center' }}>
               <Button type="primary" htmlType="submit" onClick={onSubmit} style={{marginTop:'80px'}}>
-                <i className='far fa-check-square'></i> &nbsp;Get Appointment
-              </Button>
-              <Button className="btn btn-success" style={{marginLeft:'20px',marginTop:'-6px'}}>
-                <a href="/create" style={{ textDecoration: 'none', color: 'white' }}>save</a>
+                <i className='far fa-check-square'></i> &nbsp;Update Reservation
               </Button>
             </div>
           </Form>

@@ -1,16 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "antd";
 import React from "react";
 import image1 from "../Images/image_E.jpg";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 function Packages() {
-  const navigate = useNavigate();
-
-  const bookNow = () => {
-    navigate("/reservation");
-  };
 
   return (
     <div>

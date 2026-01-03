@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from 'antd';
 import image1 from '../Images/image_E.jpg';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -15,11 +13,6 @@ const ServiceCard = ({ title, imageSrc }) => (
 );
 
 export default function Services() {
-  const navigate = useNavigate();
-
-  const bookNow = () => {
-    navigate('/reservation');
-  };
 
   return (
     <div className="min-h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: `url(${image1})` }}>

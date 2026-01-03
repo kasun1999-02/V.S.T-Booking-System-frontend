@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, message } from 'antd';
+import { Table, Button, message, Tag } from 'antd';
 import axios from 'axios';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const Admin = () => {
   const [posts, setPosts] = useState([]);
@@ -26,29 +26,94 @@ const Admin = () => {
     });
   };
 
+  const onApprove = async (id) => {
+    try {
+      const res = await axios.patch(`http://localhost:5000/post/${id}/approve`);
+      if (res.data.success) {
+        message.success('Reservation approved successfully');
+        retrievePosts();
+      }
+    } catch (error) {
+      message.error('Failed to approve reservation');
+      console.error(error);
+    }
+  };
+
+  const onReject = async (id) => {
+    try {
+      const res = await axios.patch(`http://localhost:5000/post/${id}/reject`);
+      if (res.data.success) {
+        message.success('Reservation rejected successfully');
+        retrievePosts();
+      }
+    } catch (error) {
+      message.error('Failed to reject reservation');
+      console.error(error);
+    }
+  };
+
+  const getStatusTag = (status) => {
+    const statusConfig = {
+      pending: { color: 'orange', text: 'Pending' },
+      approved: { color: 'green', text: 'Approved' },
+      rejected: { color: 'red', text: 'Rejected' }
+    };
+    const config = statusConfig[status] || statusConfig.pending;
+    return <Tag color={config.color}>{config.text}</Tag>;
+  };
+
   const columns = [
     { title: '#', key: 'index', render: (text, record, index) => index + 1 },
     { title: 'Full Name', dataIndex: 'fullname', key: 'fullname' },
     { title: 'Email', dataIndex: 'email', key: 'email' },
     { title: 'Phone Number', dataIndex: 'phonenumber', key: 'phonenumber' },
-    { title: 'Vehicle Type', dataIndex: 'vehicletype', key: 'vehicletype' },
+    { title: 'Vehicle Type', dataIndex: 'vehicaletype', key: 'vehicaletype' },
     { title: 'Vehicle Number', dataIndex: 'vehicalenumber', key: 'vehicalenumber' },
     { title: 'Service', dataIndex: 'selectservice', key: 'selectservice' },
     { title: 'Branch', dataIndex: 'branch', key: 'branch' },
-    { title: 'Date', dataIndex: 'date', key: 'date' },
-    { title: 'Comments', dataIndex: 'comments', key: 'comments' },
+    { title: 'Date', dataIndex: 'fromdate', key: 'fromdate' },
+    { title: 'Comments', dataIndex: 'comments', key: 'comments', ellipsis: true },
+    { 
+      title: 'Status', 
+      dataIndex: 'status', 
+      key: 'status',
+      render: (status) => getStatusTag(status || 'pending')
+    },
     {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Button 
-          type="primary" 
-          danger 
-          onClick={() => onDelete(record._id)}
-          icon={<DeleteOutlined />}
-        >
-          Delete
-        </Button>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {record.status !== 'approved' && (
+            <Button 
+              type="primary" 
+              success
+              onClick={() => onApprove(record._id)}
+              icon={<CheckOutlined />}
+              style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
+            >
+              Approve
+            </Button>
+          )}
+          {record.status !== 'rejected' && (
+            <Button 
+              type="primary" 
+              danger
+              onClick={() => onReject(record._id)}
+              icon={<CloseOutlined />}
+            >
+              Reject
+            </Button>
+          )}
+          <Button 
+            type="primary" 
+            danger 
+            onClick={() => onDelete(record._id)}
+            icon={<DeleteOutlined />}
+          >
+            Delete
+          </Button>
+        </div>
       ),
     },
   ];

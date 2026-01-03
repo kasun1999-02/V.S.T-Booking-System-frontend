@@ -11,20 +11,37 @@ const ReservationForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Get user email from localStorage if logged in
+  const getUserEmail = () => {
+    return localStorage.getItem('userEmail') || null;
+  };
+
   const onFinish = async (values) => {
     try {
+      const userEmail = getUserEmail();
+      console.log('Submitting reservation with values:', values);
+      console.log('User email from localStorage:', userEmail);
+      
       const res = await axios.post("http://localhost:5000/post", {
         ...values,
         fromdate: values.fromdate.format(),
+        userEmail: userEmail || values.email, // Use logged in email or form email
       });
       if (res.data.success) {
         form.resetFields();
         setSuccessMessage("Reservation Submitted Successfully");
         setErrorMessage(''); // Clear any previous error message
+      } else {
+        setErrorMessage(res.data.message || "Failed to submit reservation. Please try again.");
+        setSuccessMessage('');
       }
     } catch (error) {
-      console.error(error);
-      setErrorMessage("An error occurred while submitting the reservation. Please try again.");
+      console.error('Reservation submission error:', error);
+      const errorMsg = error.response?.data?.message || 
+                      (error.response?.data?.missingFields ? 
+                        `Missing fields: ${error.response.data.missingFields.join(', ')}` : 
+                        "An error occurred while submitting the reservation. Please try again.");
+      setErrorMessage(errorMsg);
       setSuccessMessage(''); // Clear any previous success message
     }
   };
@@ -68,7 +85,7 @@ const ReservationForm = () => {
                 <Input className="bg-gray-600 border-gray-500" />
               </Form.Item>
               <Form.Item
-                name="vehicletype"
+                name="vehicaletype"
                 label={<span className="text-white">Vehicle Type</span>}
                 rules={[{ required: true, message: 'Please select a service!' }]}
               >

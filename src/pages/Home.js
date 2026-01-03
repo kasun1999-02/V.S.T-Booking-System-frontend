@@ -1,5 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import { Link } from "react-router-dom";
 import React from "react";
 import image1 from "../Images/image_J.jpg";
 
@@ -7,11 +6,6 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 function Home() {
-  const navigate = useNavigate();
-
-  const bookNow = () => {
-    navigate("/reservation");
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
