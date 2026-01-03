@@ -23,6 +23,8 @@ const Login = () => {
         // Store user email in localStorage for reservation tracking
         localStorage.setItem('userEmail', email);
         localStorage.setItem('userRole', role);
+        // Notify header and other components about the user change
+        window.dispatchEvent(new Event('userChanged'));
 
         if (role === 'admin') {
           navigate('/admin'); // Redirect to Admin Dashboard

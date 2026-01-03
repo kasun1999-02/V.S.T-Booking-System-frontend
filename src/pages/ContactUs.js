@@ -1,17 +1,34 @@
 import React from 'react';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, message } from 'antd';
 import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const ContactUs = () => {
+  const [form] = Form.useForm();
+
   const onFinish = async (values) => {
     try {
-      // Implement your form submission logic here
       console.log("Form values:", values);
-      alert("Message sent successfully!");
+
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiBase}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      });
+
+      if (res.ok) {
+        message.success('Message sent successfully!');
+        form.resetFields();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        console.error('Backend error:', err);
+        message.error(err.message || 'Failed to send message');
+      }
     } catch (error) {
       console.error(error);
+      message.error('Failed to send message');
     }
   };
 
@@ -46,6 +63,7 @@ const ContactUs = () => {
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">Send Us a Message</h2>
               <Form
+                form={form}
                 name="contact"
                 onFinish={onFinish}
                 layout="vertical"
@@ -55,7 +73,7 @@ const ContactUs = () => {
                   name="fullName"
                   rules={[{ required: true, message: 'Please enter your full name' }]}
                 >
-                  <Input placeholder="Full Name" className="bg-gray-600 text-white border-gray-500" />
+                  <Input placeholder="Full Name" className="bg-gray-600 text-black placeholder-black border-gray-500" style={{ color: '#000' }} />
                 </Form.Item>
                 <Form.Item
                   name="email"
@@ -64,7 +82,7 @@ const ContactUs = () => {
                     { type: 'email', message: 'Please enter a valid email' }
                   ]}
                 >
-                  <Input placeholder="Email" className="bg-gray-600 text-white border-gray-500" />
+                  <Input placeholder="Email" className="bg-gray-600 text-black placeholder-black border-gray-500" style={{ color: '#000' }} />
                 </Form.Item>
                 <Form.Item
                   name="message"
@@ -73,7 +91,8 @@ const ContactUs = () => {
                   <Input.TextArea 
                     placeholder="Your Message" 
                     rows={4} 
-                    className="bg-gray-600 text-white border-gray-500" 
+                    className="bg-gray-600 text-black placeholder-black border-gray-500" 
+                    style={{ color: '#000' }} 
                   />
                 </Form.Item>
                 <Form.Item>

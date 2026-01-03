@@ -3,11 +3,12 @@ import { Table, Tag, message } from 'antd';
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserHome = () => {
   const [posts, setPosts] = useState([]);
   const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const email = localStorage.getItem('userEmail');
@@ -16,6 +17,7 @@ const UserHome = () => {
       retrievePosts(email);
     } else {
       message.warning('Please login to view your reservations');
+      setTimeout(() => navigate('/login'), 800);
     }
   }, []);
 

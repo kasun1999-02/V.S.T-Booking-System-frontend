@@ -40,8 +40,18 @@ const SignUp = () => {
       const response = await axios.post('http://localhost:5000/user/register', user);
       if (response.data.success) {
         setSuccessMessage("User registered successfully!");
+        const roleReturned = response.data.user?.role || user.role;
+        // Persist minimal user info
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userRole', roleReturned);
+        // Notify other components (header) about the user change
+        window.dispatchEvent(new Event('userChanged'));
         console.log(user); 
-        navigate('/'); 
+        if (roleReturned === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       } else {
         setErrorMessage("Registration failed. Please try again.");
       }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
@@ -6,6 +6,23 @@ import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 function Header() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    const syncUser = () => setUserEmail(localStorage.getItem('userEmail'));
+
+    // initial read
+    syncUser();
+
+    // storage events (other tabs) and custom event (same tab)
+    window.addEventListener('storage', syncUser);
+    window.addEventListener('userChanged', syncUser);
+
+    return () => {
+      window.removeEventListener('storage', syncUser);
+      window.removeEventListener('userChanged', syncUser);
+    };
+  }, []);
 
   const bookNow = () => {
     navigate('/reservation');
@@ -18,6 +35,13 @@ function Header() {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+    setUserEmail(null);
+    navigate('/');
   };
 
   return (
@@ -49,17 +73,28 @@ function Header() {
             <Link to="/contact" className="font-bold text-white text-sm xl:text-lg hover:text-gray-300 transition-colors">
               Contact Us
             </Link>
+            {userEmail && (
+              <Link to="/me" className="font-bold text-white text-sm xl:text-lg hover:text-gray-300 transition-colors">
+                My Reservations
+              </Link>
+            )}
           </nav>
 
           {/* Desktop Book Now Button */}
-          <div className="hidden lg:block">
-            <Button
-              type="primary"
-              className="bg-red-500 text-white font-bold py-1.5 px-4 xl:py-2 xl:px-6 rounded-lg hover:bg-red-600 transition-colors text-xs xl:text-base"
-              onClick={bookNow}
-            >
-              BOOK NOW
-            </Button>
+          <div className="hidden lg:flex items-center gap-3">
+            {userEmail ? (
+              <Button onClick={handleLogout} className="bg-gray-700 text-white font-bold py-1.5 px-3 rounded-lg hover:bg-gray-600 transition-colors">
+                Logout
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                className="bg-red-500 text-white font-bold py-1.5 px-4 xl:py-2 xl:px-6 rounded-lg hover:bg-red-600 transition-colors text-xs xl:text-base"
+                onClick={bookNow}
+              >
+                BOOK NOW
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -123,14 +158,29 @@ function Header() {
                 >
                   Contact Us
                 </Link>
-                <div className="px-6 py-3">
-                  <Button
-                    type="primary"
-                    className="bg-red-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-600 w-full transition-colors"
-                    onClick={bookNow}
+                {userEmail && (
+                  <Link 
+                    to="/me" 
+                    className="px-6 py-3 text-white font-bold text-base hover:bg-gray-700 transition-colors"
+                    onClick={closeMenu}
                   >
-                    BOOK NOW
-                  </Button>
+                    My Reservations
+                  </Link>
+                )}
+                <div className="px-6 py-3">
+                  {userEmail ? (
+                    <Button onClick={() => { handleLogout(); closeMenu(); }} className="w-full bg-gray-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 transition-colors">
+                      Logout
+                    </Button>
+                  ) : (
+                    <Button
+                      type="primary"
+                      className="bg-red-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-600 w-full transition-colors"
+                      onClick={bookNow}
+                    >
+                      BOOK NOW
+                    </Button>
+                  )}
                 </div>
               </nav>
             </div>
